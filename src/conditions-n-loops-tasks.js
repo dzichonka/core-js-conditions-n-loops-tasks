@@ -123,8 +123,30 @@ function isIsoscelesTriangle(a, b, c) {
  *  10  => X
  *  26  => XXVI
  */
-function convertToRomanNumerals(/* num */) {
-  throw new Error('Not implemented');
+function convertToRomanNumerals(num) {
+  let number = num;
+  let res = '';
+  while (number >= 10) {
+    res += 'X';
+    number -= 10;
+  }
+  if (number === 9) {
+    res += 'IX';
+    number -= 9;
+  }
+  if (number >= 5) {
+    res += 'V';
+    number -= 5;
+  }
+  if (number === 4) {
+    res += 'IV';
+    number -= 4;
+  }
+  while (number >= 1) {
+    res += 'I';
+    number -= 1;
+  }
+  return res;
 }
 
 /**
@@ -316,10 +338,42 @@ function shuffleChar(/* str, iterations */) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
-}
+function getNearestBigger(number) {
+  const length = Math.ceil(Math.log10(number));
+  if (length === 1) {
+    return number;
+  }
+  const arr = [];
+  function getDegit(i) {
+    return Math.floor(number / 10 ** (length - i - 1)) % 10;
+  }
+  for (let i = 0; i < length; i += 1) {
+    arr.push(getDegit(i));
+  }
+  let i = length - 2;
+  const right = [arr.pop()];
+  function sorted(a, b) {
+    return a - b;
+  }
+  while (i >= 0) {
+    const current = arr.pop();
+    const largerIndex = right.findIndex((x) => x > current);
 
+    if (largerIndex !== -1) {
+      const larger = right.splice(largerIndex, 1)[0];
+      right.push(current);
+      right.sort(sorted);
+
+      let result = [...arr, larger, ...right];
+      result = result.reduce((num, digit) => num * 10 + digit, 0);
+      return result;
+    }
+    right.push(current);
+    right.sort((a, b) => a - b);
+    i -= 1;
+  }
+  return number;
+}
 module.exports = {
   isPositive,
   getMaxNumber,
