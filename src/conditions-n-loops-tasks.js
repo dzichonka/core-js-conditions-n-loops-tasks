@@ -479,24 +479,36 @@ function sortByAsc(arr) {
  */
 function shuffleChar(str, iterations) {
   let res = str;
-  if (str.length <= 1 || iterations <= 0) {
+  const len = str.length;
+  if (len <= 1 || iterations <= 0) {
     return str;
   }
-  function shuffle() {
+  function shuffle(input) {
     let odds = '';
     let evens = '';
-    const len = str.length;
     for (let j = 0; j < len; j += 1) {
       if (j % 2 === 0) {
-        evens += res[j];
+        evens += input[j];
       } else {
-        odds += res[j];
+        odds += input[j];
       }
     }
-    res = evens + odds;
+    return evens + odds;
   }
-  for (let i = 0; i < iterations; i += 1) {
-    shuffle();
+  function findCycle(string) {
+    const init = string;
+    let cur = string;
+    let count = 0;
+    do {
+      cur = shuffle(cur);
+      count += 1;
+    } while (cur !== init);
+    return count;
+  }
+  const cycleLength = findCycle(res);
+  const iter = iterations % cycleLength;
+  for (let i = 0; i < iter; i += 1) {
+    res = shuffle(res);
   }
   return res;
 }
