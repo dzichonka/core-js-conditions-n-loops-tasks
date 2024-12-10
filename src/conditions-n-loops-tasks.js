@@ -330,6 +330,37 @@ function getSpiralMatrix(size) {
   for (let i = 0; i < size; i += 1) {
     matrix[i] = [];
   }
+  let top = 0;
+  let right = size - 1;
+  let bottom = size - 1;
+  let left = 0;
+  let cur = 0;
+  for (; top <= bottom && left <= right; ) {
+    for (let i = left; i <= right; i += 1) {
+      cur += 1;
+      matrix[top][i] = cur;
+    }
+    top += 1;
+    for (let i = top; i <= bottom; i += 1) {
+      cur += 1;
+      matrix[i][right] = cur;
+    }
+    right -= 1;
+    if (top <= bottom) {
+      for (let i = right; i >= left; i -= 1) {
+        cur += 1;
+        matrix[bottom][i] = cur;
+      }
+      bottom -= 1;
+    }
+    if (left <= right) {
+      for (let i = bottom; i >= top; i -= 1) {
+        cur += 1;
+        matrix[i][left] = cur;
+      }
+      left += 1;
+    }
+  }
   return matrix;
 }
 
